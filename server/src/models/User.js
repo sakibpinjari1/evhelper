@@ -34,6 +34,26 @@ const userSchema = new mongoose.Schema(
       min: 0,
     },
 
+    tokenHistory: [{
+      amount: {
+        type: Number,
+        required: true,
+      },
+      type: {
+        type: String,
+        required: true,
+        enum: ["charging_request", "reward", "refund", "bonus"]
+      },
+      description: {
+        type: String,
+        required: true,
+      },
+      timestamp: {
+        type: Date,
+        default: Date.now,
+      }
+    }],
+
     isOnline: {
       type: Boolean,
       default: false,
