@@ -1,36 +1,32 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import User from './server/src/models/User.js';
+const mongoose = require('mongoose');
 
-dotenv.config({ path: './server/.env' });
-
-async function checkUsers() {
+mongoose.connect('mongodb://127.0.0.1:27017/ev_charging').then(async () => {
+  const db = mongoose.connection.db;
+  const collection = db.collection('chargingrequests');
+  
   try {
-    await mongoose.connect(process.env.MONGODB_URI, { serverSelectionTimeoutMS: 5000 });
-    console.log('✅ Connected to MongoDB\n');
-
-    const users = await User.find({}, 'name email city tokenBalance createdAt').lean();
-    console.log(`📊 Total Users: ${users.length}\n`);
+    const count = await collection.countDocuments();
+    const withContactInfo = await collection.countDocuments({ contactInfo: { $exists: true } });
+    const withPhoneNumber = await collection.countDocuments({ phoneNumber: { $exists: true } });
     
-    if (users.length > 0) {
-      console.log('📋 Users in Database:\n');
-      users.forEach((user, idx) => {
-        console.log(`${idx + 1}. ${user.name}`);
-        console.log(`   Email: ${user.email}`);
-        console.log(`   City: ${user.city}`);
-        console.log(`   Tokens: ${user.tokenBalance}`);
-        console.log(`   Created: ${new Date(user.createdAt).toLocaleString()}\n`);
-      });
-    } else {
-      console.log('ℹ️  No users found in database yet.\n');
+    console.log(`Total documents: ${count}`);
+    console.log(`With contactInfo: ${withContactInfo}`);
+    console.log(`With phoneNumber: ${withPhoneNumber}`);
+    
+    // Show a sample document to see structure
+    if (withContactInfo > 0) {
+      const sample = await collection.findOne({ contactInfo: { $exists: true } });
+      console.log('Sample with contactInfo:', JSON.stringify(sample, null, 2));
     }
-
+    
+    if (withPhoneNumber > 0) {
+      const sample = await collection.findOne({ phoneNumber: { $exists: true } });
+      console.log('Sample with phoneNumber:', JSON.stringify(sample, null, 2));
+    }
+    
+  } catch (error) {
+    console.error('Error:', error);
+  } finally {
     await mongoose.disconnect();
-    process.exit(0);
-  } catch (err) {
-    console.error('❌ Error:', err.message);
-    process.exit(1);
   }
-}
-
-checkUsers();
+}).catch(console.error);

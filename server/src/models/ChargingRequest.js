@@ -45,10 +45,18 @@ const chargingRequestSchema = new mongoose.Schema(
       default: "",
     },
 
-    contactInfo: {
+    phoneNumber: {
       type: String,
+      required: true,
       trim: true,
-      default: "",
+      validate: {
+        validator: function(v) {
+          // Basic phone number validation - accepts formats like:
+          // +1234567890, 123-456-7890, (123) 456-7890, 1234567890
+          return /^[\+]?[(]?[0-9]{1,3}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,9}$/.test(v);
+        },
+        message: 'Please enter a valid phone number'
+      }
     },
 
     estimatedTime: {

@@ -8,7 +8,7 @@ const ChargingRequestForm = () => {
     location: '',
     urgency: 'medium',
     message: '',
-    contactInfo: '',
+    phoneNumber: '',
     estimatedTime: ''
   });
   const [errors, setErrors] = useState({});
@@ -23,6 +23,16 @@ const ChargingRequestForm = () => {
 
     if (!formData.urgency) {
       newErrors.urgency = 'Urgency is required';
+    }
+
+    if (!formData.phoneNumber.trim()) {
+      newErrors.phoneNumber = 'Phone number is required';
+    }
+
+    // Phone number validation
+    const phoneRegex = /^[\+]?[(]?[0-9]{1,3}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,9}$/;
+    if (formData.phoneNumber && !phoneRegex.test(formData.phoneNumber.trim())) {
+      newErrors.phoneNumber = 'Please enter a valid phone number';
     }
 
     if (formData.estimatedTime && (isNaN(formData.estimatedTime) || formData.estimatedTime < 1)) {
@@ -46,7 +56,7 @@ const ChargingRequestForm = () => {
         location: formData.location.trim(),
         urgency: formData.urgency.toLowerCase(),
         message: formData.message.trim(),
-        contactInfo: formData.contactInfo.trim(),
+        phoneNumber: formData.phoneNumber.trim(),
         estimatedTime: formData.estimatedTime ? parseInt(formData.estimatedTime) : null
       };
 
@@ -57,7 +67,7 @@ const ChargingRequestForm = () => {
           location: '',
           urgency: 'medium',
           message: '',
-          contactInfo: '',
+          phoneNumber: '',
           estimatedTime: ''
         });
         
@@ -153,18 +163,18 @@ const ChargingRequestForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Contact Info</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
           <input
-            type="text"
-            name="contactInfo"
-            value={formData.contactInfo}
+            type="tel"
+            name="phoneNumber"
+            value={formData.phoneNumber}
             onChange={handleChange}
             className={`w-full px-3 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
-              errors.contactInfo ? 'border-red-500' : 'border-gray-300'
+              errors.phoneNumber ? 'border-red-500' : 'border-gray-300'
             }`}
-            placeholder="Phone or email (optional)"
+            placeholder="Enter your phone number"
           />
-          {errors.contactInfo && <p className="mt-1 text-sm text-red-600">{errors.contactInfo}</p>}
+          {errors.phoneNumber && <p className="mt-1 text-sm text-red-600">{errors.phoneNumber}</p>}
         </div>
 
         <div>

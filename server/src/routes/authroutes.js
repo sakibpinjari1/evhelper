@@ -28,7 +28,7 @@ router.post("/register", async (req, res) => {
       email,
       password: hashedPassword,
       city,
-      tokenBalance: 10, // initial tokens
+      tokenBalance: 50, // initial tokens
     });
 
     const token = jwt.sign(

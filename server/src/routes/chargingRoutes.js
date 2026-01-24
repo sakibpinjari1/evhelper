@@ -16,15 +16,24 @@ const TOKEN_COST = 5;
  */
 router.post("/requests", authMiddleware, async (req, res) => {
   try {
-    const { location, urgency, message, contactInfo, contact, estimatedTime, timeAvailable } = req.body;
+    const { location, urgency, message, phoneNumber, contactInfo, contact, estimatedTime, timeAvailable } = req.body;
     const userId = req.user._id;
     const userCity = req.user.city;
 
     // Validate required fields
-    if (!location || !urgency) {
+    if (!location || !urgency || !phoneNumber) {
       return res.status(400).json({
         success: false,
-        message: "Location and urgency are required fields"
+        message: "Location, urgency, and phone number are required fields"
+      });
+    }
+
+    // Validate phone number format
+    const phoneRegex = /^[\+]?[(]?[0-9]{1,3}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,9}$/;
+    if (!phoneRegex.test(phoneNumber.trim())) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid phone number"
       });
     }
 
@@ -86,7 +95,7 @@ router.post("/requests", authMiddleware, async (req, res) => {
         location: location.trim(),
         urgency: urgency.toLowerCase(),
         message: message ? message.trim() : "",
-        contactInfo: (contactInfo ?? contact ?? "").toString().trim(),
+        phoneNumber: phoneNumber.trim(),
         estimatedTime: estimatedTime ? parseInt(estimatedTime) : null,
         tokenCost: TOKEN_COST
       });
@@ -121,7 +130,7 @@ router.post("/requests", authMiddleware, async (req, res) => {
           location: request.location,
           urgency: request.urgency,
           message: request.message,
-          contactInfo: request.contactInfo,
+          phoneNumber: request.phoneNumber,
           estimatedTime: request.estimatedTime,
           status: request.status,
           tokenCost: request.tokenCost,
@@ -143,7 +152,7 @@ router.post("/requests", authMiddleware, async (req, res) => {
           location: request.location,
           urgency: request.urgency,
           message: request.message,
-          contactInfo: request.contactInfo,
+          phoneNumber: request.phoneNumber,
           estimatedTime: request.estimatedTime ?? timeAvailable ?? null,
           tokenCost: request.tokenCost,
           remainingTokens: updatedUser.tokenBalance,
@@ -717,6 +726,141 @@ router.post("/requests/:requestId/cancel", authMiddleware, async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Internal server error while canceling charging request"
+    });
+  }
+});
+
+/**
+ * POST /api/charging/requests/:requestId/complete-requester
+ * Complete a charging request (requester only)
+ * Only the original requester can use this endpoint
+ * Updates status to COMPLETED without token transfer (tokens already transferred at creation)
+ */
+router.post("/requests/:requestId/complete-requester", authMiddleware, async (req, res) => {
+  try {
+    const { requestId } = req.params;
+    const userId = req.user._id.toString();
+
+    // Find the request
+    const request = await ChargingRequest.findById(requestId)
+      .populate('requesterId helperId', 'name email city');
+
+    if (!request) {
+      return res.status(404).json({
+        success: false,
+        message: "Charging request not found"
+      });
+    }
+
+    // Authorization check: Only the requester can complete using this endpoint
+    if (request.requesterId._id.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Only the requester can mark this request as completed"
+      });
+    }
+
+    // Status check: Only ACCEPTED requests can be completed
+    if (request.status !== "ACCEPTED") {
+      return res.status(400).json({
+        success: false,
+        message: `Cannot complete request with status: ${request.status}. Only ACCEPTED requests can be marked as completed.`
+      });
+    }
+
+    try {
+      // Update request status to COMPLETED
+      const updatedRequest = await ChargingRequest.findByIdAndUpdate(
+        requestId,
+        {
+          status: "COMPLETED",
+          completedAt: new Date()
+        },
+        {
+          new: true,
+          populate: [
+            { path: 'requesterId', select: 'name email city' },
+            { path: 'helperId', select: 'name email city' }
+          ]
+        }
+      );
+
+      if (!updatedRequest) {
+        throw new Error("Failed to update request status");
+      }
+
+      console.log(`Charging request ${requestId} marked as completed by requester`);
+
+      // Emit real-time notifications
+      const io = req.app.get('io');
+      if (io) {
+        const roomName = `city-${request.city.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`;
+
+        // 1. Notify requester of completion confirmation
+        io.to(request.requesterId._id.toString()).emit('request-completed-by-requester', {
+          request: {
+            id: updatedRequest._id,
+            helperId: updatedRequest.helperId._id,
+            helperName: updatedRequest.helperId.name,
+            status: updatedRequest.status,
+            completedAt: updatedRequest.completedAt
+          },
+          timestamp: new Date().toISOString()
+        });
+
+        // 2. Notify helper that requester marked as completed
+        if (request.helperId) {
+          io.to(request.helperId._id.toString()).emit('request-completed-by-requester', {
+            request: {
+              id: updatedRequest._id,
+              requesterName: updatedRequest.requesterId.name,
+              status: updatedRequest.status,
+              completedAt: updatedRequest.completedAt
+            },
+            timestamp: new Date().toISOString()
+          });
+        }
+
+        // 3. Notify city that request was completed
+        io.to(roomName).emit('request-completed-notification', {
+          requestId: updatedRequest._id,
+          message: `A charging request has been completed in ${request.city}`,
+          requesterName: updatedRequest.requesterId.name,
+          helperName: updatedRequest.helperId.name,
+          status: "COMPLETED",
+          completedAt: updatedRequest.completedAt,
+          timestamp: new Date().toISOString()
+        });
+      }
+
+      res.json({
+        success: true,
+        message: "Charging request marked as completed successfully",
+        request: {
+          id: updatedRequest._id,
+          requesterId: updatedRequest.requesterId._id,
+          helperId: updatedRequest.helperId._id,
+          city: updatedRequest.city,
+          status: updatedRequest.status,
+          completedAt: updatedRequest.completedAt
+        }
+      });
+
+    } catch (error) {
+      console.error("Error completing charging request:", error);
+
+      res.status(500).json({
+        success: false,
+        message: "Failed to complete charging request. Please try again."
+      });
+    }
+
+  } catch (error) {
+    console.error("Error completing charging request:", error);
+    
+    res.status(500).json({
+      success: false,
+      message: "Internal server error while completing charging request"
     });
   }
 });

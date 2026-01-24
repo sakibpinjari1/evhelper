@@ -125,6 +125,21 @@ const DashboardPage = () => {
     }
   };
 
+  const handleCompleteRequest = async (requestId) => {
+    try {
+      const response = await api.post(`/charging/requests/${requestId}/complete-requester`);
+      
+      if (response.data.success) {
+        alert('Request marked as completed successfully!');
+        fetchRequests(); // Refresh the requests list
+      } else {
+        alert(response.data.message || 'Failed to mark request as completed');
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || error.message || 'Failed to mark request as completed');
+    }
+  };
+
   if (!state.isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 sm:px-6 lg:px-8">
@@ -262,6 +277,12 @@ const DashboardPage = () => {
                           </div>
                         )}
 
+                        {request.phoneNumber && (
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-900">Phone Number</h4>
+                            <p className="text-gray-600">{request.phoneNumber}</p>
+                          </div>
+                        )}
                         {request.contactInfo && (
                           <div>
                             <h4 className="text-sm font-medium text-gray-900">Contact Info</h4>
@@ -297,8 +318,16 @@ const DashboardPage = () => {
                         )}
 
                         {request.status === 'ACCEPTED' && (
-                          <div className="text-sm text-blue-600">
-                            Waiting for helper to complete...
+                          <div className="space-x-2">
+                            <button 
+                              onClick={() => handleCompleteRequest(request._id)}
+                              className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-green-600 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                            >
+                              Mark as Completed
+                            </button>
+                            <span className="text-sm text-gray-500">
+                              Waiting for completion...
+                            </span>
                           </div>
                         )}
 

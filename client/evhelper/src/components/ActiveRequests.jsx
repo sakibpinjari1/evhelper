@@ -166,6 +166,7 @@ const ActiveRequests = () => {
                         </div>
                         <p className="text-gray-900 font-medium">Location: {request.location}</p>
                         <p className="text-gray-600 text-sm">Urgency: {request.urgency}</p>
+                        <p className="text-gray-600 text-sm">Phone: {request.phoneNumber || request.contactInfo}</p>
                         <p className="text-gray-600 text-sm">{new Date(request.createdAt).toLocaleString()}</p>
                         {request.message && (
                           <p className="text-gray-600 text-sm mt-1">Message: {request.message}</p>
