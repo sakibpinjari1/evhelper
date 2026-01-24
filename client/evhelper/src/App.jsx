@@ -13,7 +13,8 @@ function AppRoutes() {
   const { state } = useAuth();
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen relative">
+      <div className="ev-grid-bg"></div>
       <Routes>
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />

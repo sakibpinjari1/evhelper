@@ -140,12 +140,32 @@ const DashboardPage = () => {
     }
   };
 
+  const getStatusClass = (status) => {
+    switch (status) {
+      case 'OPEN': return 'ev-status-open';
+      case 'ACCEPTED': return 'ev-status-accepted';
+      case 'COMPLETED': return 'ev-status-completed';
+      case 'CANCELED': return 'ev-status-canceled';
+      default: return 'ev-status-completed';
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'OPEN': return '⚡';
+      case 'ACCEPTED': return '🤝';
+      case 'COMPLETED': return '✅';
+      case 'CANCELED': return '❌';
+      default: return '⏳';
+    }
+  };
+
   if (!state.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center py-12 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in to access your dashboard</h2>
-          <a href="/login" className="text-blue-600 hover:text-blue-500 underline">
+          <h2 className="text-2xl font-bold text-white mb-4">Please log in to access your dashboard</h2>
+          <a href="/login" className="text-cyan-400 hover:text-cyan-300 underline">
             Sign In
           </a>
         </div>
@@ -154,79 +174,116 @@ const DashboardPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <div className="px-4 py-5 sm:p-6 lg:p-8">
-            <div className="flex items-center justify-between mb-6">
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+    <div className="min-h-screen py-8 relative z-10">
+      <div className="ev-container">
+        {/* Header */}
+        <div className="ev-card ev-card-spacing">
+          <div className="ev-section">
+            <div className="ev-flex-center justify-between">
+              <div className="ev-flex-center gap-4">
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-linear-to-br from-cyan-400 to-blue-500 rounded-full ev-charging-pulse">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  </svg>
+                </div>
+                <h1 className="ev-heading-1 ev-neon-text">Dashboard</h1>
+              </div>
               <button
                 onClick={handleLogout}
-                className="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                className="ev-button-danger"
               >
                 Sign Out
               </button>
             </div>
           </div>
+        </div>
 
-          {/* Quick Actions */}
-          <div className="bg-gray-50 px-4 py-5 sm:p-6 lg:p-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <a
-                href="/charging-request"
-                className="flex items-center justify-center px-6 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md transition-colors"
-              >
-                <span className="text-2xl mr-3">⚡</span>
-                <span className="text-lg font-semibold">Create Charging Request</span>
-              </a>
-              <a
-                href="/active-requests"
-                className="flex items-center justify-center px-6 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 shadow-md transition-colors"
-              >
-                <span className="text-2xl mr-3">🔋</span>
-                <span className="text-lg font-semibold">View Active Requests</span>
-              </a>
+        {/* Quick Actions */}
+        <div className="ev-grid-2 ev-card-spacing ev-mobile-stack">
+          <a
+            href="/charging-request"
+            className="ev-glass-card group cursor-pointer transition-all duration-300 hover:scale-105"
+          >
+            <div className="p-6 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-linear-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center group-hover:ev-charging-pulse">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Create Charging Request</h3>
+                  <p className="text-gray-400 text-sm">Get emergency charging assistance</p>
+                </div>
+              </div>
+              <svg className="w-5 h-5 text-gray-400 group-hover:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </div>
-          </div>
+          </a>
 
-          {/* User Info Card */}
-          <div className="bg-gray-50 px-4 py-5 sm:p-6 lg:p-8">
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="px-4 py-5 sm:p-6 lg:p-8">
-                <div className="flex items-center">
-                  <div className="shrink-0 bg-blue-100 rounded-full p-3">
-                    <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold text-xl">
-                        {state.user?.name?.charAt(0) || 'U'}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <h2 className="text-2xl font-bold text-gray-900">{state.user?.name}</h2>
-                    <p className="text-gray-600">{state.user?.email}</p>
-                    <p className="text-gray-600">{state.user?.city}</p>
-                    <p className="text-sm text-gray-500">Token Balance: {state.user?.tokenBalance || 0}</p>
-                  </div>
+          <a
+            href="/active-requests"
+            className="ev-glass-card group cursor-pointer transition-all duration-300 hover:scale-105"
+          >
+            <div className="p-6 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-linear-to-br from-green-400 to-blue-500 rounded-lg flex items-center justify-center group-hover:ev-charging-pulse">
+                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">View Active Requests</h3>
+                  <p className="text-gray-400 text-sm">Help other EV owners in your city</p>
+                </div>
+              </div>
+              <svg className="w-5 h-5 text-gray-400 group-hover:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </a>
+        </div>
+
+        {/* User Info Card */}
+        <div className="ev-glass-card mb-8">
+          <div className="p-6 lg:p-8">
+            <div className="flex items-center gap-6">
+              <div className="shrink-0">
+                <div className="w-20 h-20 bg-linear-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-2xl">
+                    {state.user?.name?.charAt(0) || 'U'}
+                  </span>
+                </div>
+              </div>
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold text-white">{state.user?.name}</h2>
+                <p className="text-gray-400">{state.user?.email}</p>
+                <p className="text-gray-400">{state.user?.city}</p>
+                <div className="mt-2 inline-flex items-center px-3 py-1 bg-cyan-500/20 border border-cyan-500/50 rounded-full">
+                  <span className="text-cyan-300 text-sm font-medium">Token Balance: {state.user?.tokenBalance || 0}</span>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Charging Requests Section */}
-          <div className="px-4 py-5 sm:p-6 lg:p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Your Charging Requests</h2>
+        {/* Charging Requests Section */}
+        <div className="ev-glass-card">
+          <div className="p-6 lg:p-8">
+            <h2 className="text-2xl font-bold text-white mb-6">Your Charging Requests</h2>
             
             {loading ? (
               <div className="text-center py-12">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                <p className="mt-2 text-gray-600">Loading active requests...</p>
+                <div className="ev-loading mx-auto mb-4"></div>
+                <p className="text-gray-400">Loading your requests...</p>
               </div>
             ) : error ? (
               <div className="text-center py-12">
-                <div className="text-red-600">{error}</div>
+                <div className="text-red-400 mb-4">{error}</div>
                 <button 
                   onClick={fetchRequests}
-                  className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="ev-neon-button"
                 >
                   Try Again
                 </button>
@@ -234,26 +291,27 @@ const DashboardPage = () => {
             ) : (
               <div className="space-y-4">
                 {requests.length === 0 ? (
-                  <div className="text-center py-12 text-gray-500">
-                    <p>No charging requests found.</p>
-                    <p>Create your first request to get emergency charging assistance!</p>
+                  <div className="text-center py-12 text-gray-400">
+                    <div className="mb-4">
+                      <svg className="w-16 h-16 mx-auto text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                      </svg>
+                    </div>
+                    <p className="text-lg">No charging requests found.</p>
+                    <p className="text-sm mt-2">Create your first request to get emergency charging assistance!</p>
                   </div>
                 ) : (
                   requests.map((request) => (
-                    <div key={request._id} className="bg-white p-4 rounded-lg shadow">
-                      <div className="flex items-center justify-between mb-2">
+                    <div key={request._id} className="ev-glass-card p-6">
+                      <div className="flex items-center justify-between mb-4">
                         <div>
-                          <h3 className="text-lg font-medium text-gray-900">Request #{request._id}</h3>
-                          <p className="text-sm text-gray-500">
+                          <h3 className="text-lg font-medium text-white">Request #{request._id.slice(-6)}</h3>
+                          <p className="text-sm text-gray-400">
                             Created: {new Date(request.createdAt).toLocaleDateString()}
                           </p>
                         </div>
-                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                          request.status === 'OPEN' ? 'bg-green-100 text-green-800' :
-                          request.status === 'ACCEPTED' ? 'bg-blue-100 text-blue-800' :
-                          request.status === 'COMPLETED' ? 'bg-gray-100 text-gray-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
+                        <span className={`px-3 py-1 text-xs font-semibold rounded-full ${getStatusClass(request.status)}`}>
+                          <span className="mr-1">{getStatusIcon(request.status)}</span>
                           {request.status}
                         </span>
                       </div>
@@ -261,56 +319,54 @@ const DashboardPage = () => {
                       <div className="space-y-3">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <h4 className="text-sm font-medium text-gray-900">Location</h4>
-                            <p className="text-gray-600">{request.location}</p>
+                            <h4 className="text-sm font-medium text-gray-300">Location</h4>
+                            <p className="text-gray-400">{request.location}</p>
                           </div>
                           <div>
-                            <h4 className="text-sm font-medium text-gray-900">Urgency</h4>
-                            <p className="text-gray-600 capitalize">{request.urgency}</p>
+                            <h4 className="text-sm font-medium text-gray-300">Urgency</h4>
+                            <p className="text-gray-400 capitalize">{request.urgency}</p>
                           </div>
                         </div>
 
                         {request.message && (
                           <div>
-                            <h4 className="text-sm font-medium text-gray-900">Message</h4>
-                            <p className="text-gray-600">{request.message}</p>
+                            <h4 className="text-sm font-medium text-gray-300">Message</h4>
+                            <p className="text-gray-400">{request.message}</p>
                           </div>
                         )}
 
                         {request.phoneNumber && (
                           <div>
-                            <h4 className="text-sm font-medium text-gray-900">Phone Number</h4>
-                            <p className="text-gray-600">{request.phoneNumber}</p>
+                            <h4 className="text-sm font-medium text-gray-300">Phone Number</h4>
+                            <p className="text-gray-400">{request.phoneNumber}</p>
                           </div>
                         )}
                         {request.contactInfo && (
                           <div>
-                            <h4 className="text-sm font-medium text-gray-900">Contact Info</h4>
-                            <p className="text-gray-600">{request.contactInfo}</p>
+                            <h4 className="text-sm font-medium text-gray-300">Contact Info</h4>
+                            <p className="text-gray-400">{request.contactInfo}</p>
                           </div>
                         )}
 
                         {request.estimatedTime && (
                           <div>
-                            <h4 className="text-sm font-medium text-gray-900">Estimated Time</h4>
-                            <p className="text-gray-600">{request.estimatedTime} minutes</p>
+                            <h4 className="text-sm font-medium text-gray-300">Estimated Time</h4>
+                            <p className="text-gray-400">{request.estimatedTime} minutes</p>
                           </div>
                         )}
                       </div>
 
-                      <div className="flex items-center justify-between pt-4">
-                        <div className="text-sm text-gray-500">
+                      <div className="flex items-center justify-between pt-4 mt-4 border-t border-gray-700">
+                        <div className="text-sm text-gray-400">
                           {request.tokenCost} tokens • Status: {request.status}
                         </div>
                          
                         {/* Action buttons based on status */}
                         {request.status === 'OPEN' && (
                           <div className="space-x-2">
-                            {/* CRITICAL FIX: Don't show Accept button for own requests */}
-                            {/* Only show Cancel button for user's own requests */}
                             <button 
                               onClick={() => handleCancelRequest(request._id)}
-                              className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-red-600 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                              className="px-4 py-2 bg-red-500/20 border border-red-500/50 text-red-300 rounded-lg hover:bg-red-500/30 transition-colors"
                             >
                               Cancel Request
                             </button>
@@ -321,18 +377,18 @@ const DashboardPage = () => {
                           <div className="space-x-2">
                             <button 
                               onClick={() => handleCompleteRequest(request._id)}
-                              className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-green-600 bg-white hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                              className="px-4 py-2 bg-green-500/20 border border-green-500/50 text-green-300 rounded-lg hover:bg-green-500/30 transition-colors"
                             >
                               Mark as Completed
                             </button>
-                            <span className="text-sm text-gray-500">
+                            <span className="text-sm text-gray-400">
                               Waiting for completion...
                             </span>
                           </div>
                         )}
 
                         {request.status === 'COMPLETED' && (
-                          <div className="text-sm text-green-600">
+                          <div className="text-sm text-green-400">
                             <span>✓ Completed</span>
                           </div>
                         )}

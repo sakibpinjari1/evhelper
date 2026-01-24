@@ -67,115 +67,162 @@ const ActiveRequests = () => {
     }
   };
 
-  const getStatusColor = (status) => {
+  const getStatusClass = (status) => {
     switch (status) {
-      case 'OPEN':
-        return 'text-green-800 bg-green-100';
-      case 'ACCEPTED':
-        return 'text-blue-800 bg-blue-100';
-      case 'COMPLETED':
-        return 'text-gray-800 bg-gray-100';
-      case 'CANCELED':
-        return 'text-red-800 bg-red-100';
-      default:
-        return 'text-gray-600 bg-gray-100';
+      case 'OPEN': return 'ev-status-open';
+      case 'ACCEPTED': return 'ev-status-accepted';
+      case 'COMPLETED': return 'ev-status-completed';
+      case 'CANCELED': return 'ev-status-canceled';
+      default: return 'ev-status-completed';
     }
   };
 
   const getStatusIcon = (status) => {
     switch (status) {
-      case 'OPEN':
-        return '⚡';
-      case 'ACCEPTED':
-        return '🤝';
-      case 'COMPLETED':
-        return '✅';
-      case 'CANCELED':
-        return '❌';
-      default:
-        return '⏳';
+      case 'OPEN': return '⚡';
+      case 'ACCEPTED': return '🤝';
+      case 'COMPLETED': return '✅';
+      case 'CANCELED': return '❌';
+      default: return '⏳';
+    }
+  };
+
+  const getUrgencyColor = (urgency) => {
+    switch (urgency?.toLowerCase()) {
+      case 'low': return 'bg-green-500/20 border-green-500/50 text-green-300';
+      case 'medium': return 'bg-amber-500/20 border-amber-500/50 text-amber-300';
+      case 'high': return 'bg-red-500/20 border-red-500/50 text-red-300';
+      default: return 'bg-gray-500/20 border-gray-500/50 text-gray-300';
     }
   };
 
   if (!state.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center py-12 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in to view active requests</h2>
-          <a href="/login" className="text-blue-600 hover:text-blue-500 underline">Sign In</a>
+          <h2 className="text-2xl font-bold text-white mb-4">Please log in to view active requests</h2>
+          <a href="/login" className="text-cyan-400 hover:text-cyan-300 underline">
+            Sign In
+          </a>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <div className="px-4 py-5 sm:p-6 lg:p-8">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-4">
+    <div className="min-h-screen py-8 relative z-10">
+      <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="ev-card ev-card-spacing">
+          <div className="ev-section">
+            <div className="ev-flex-center justify-between">
+              <div className="ev-flex-center gap-4">
                 <button
                   onClick={() => navigate('/dashboard')}
-                  className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200"
+                  className="ev-button-secondary"
                 >
-                  ← Back
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Back
                 </button>
-                <h1 className="text-3xl font-bold text-gray-900">Active Requests</h1>
+                <div>
+                  <h1 className="ev-heading-1 ev-neon-text">Active Requests</h1>
+                  <p className="ev-text-muted">
+                    Real-time requests in {state.user?.city || 'your city'}
+                  </p>
+                </div>
               </div>
-              <div className="text-sm text-gray-600">
-                Real-time requests in {state.user?.city || 'your city'}
+              <div className="flex items-center gap-2">
+                <div className="ev-loading"></div>
+                <span className="text-sm text-gray-400">Live</span>
               </div>
             </div>
+          </div>
+        </div>
 
+        {/* Content */}
+        <div className="ev-glass-card">
+          <div className="p-6 lg:p-8">
             {loading ? (
               <div className="text-center py-12">
-                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-                <p className="mt-2 text-gray-600">Loading active requests...</p>
+                <div className="ev-loading mx-auto mb-4"></div>
+                <p className="text-gray-400">Loading active requests...</p>
               </div>
             ) : error ? (
               <div className="text-center py-12">
-                <div className="text-red-600">{error}</div>
+                <div className="text-red-400 mb-4">{error}</div>
                 <button 
                   onClick={fetchRequests}
-                  className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50"
+                  className="ev-neon-button"
                 >
                   Refresh Requests
                 </button>
               </div>
             ) : requests.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-gray-600">No active requests in your city</p>
+                <div className="mb-4">
+                  <svg className="w-16 h-16 mx-auto text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  </svg>
+                </div>
+                <p className="text-lg text-gray-400">No active requests in your city</p>
+                <p className="text-sm text-gray-500 mt-2">Be the first to help or check back later</p>
               </div>
             ) : (
               <div className="space-y-4">
                 {requests.map((request) => (
-                  <div key={request._id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                    <div className="flex items-center justify-between">
+                  <div key={request._id} className="ev-glass-card p-6 hover:scale-[1.02] transition-transform duration-300">
+                    <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-2xl">{getStatusIcon(request.status)}</span>
-                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(request.status)}`}>
-                            {request.status}
-                          </span>
-                          {isMyRequest(request) && (
-                            <span className="px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded">
-                              Your Request
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="text-3xl">{getStatusIcon(request.status)}</div>
+                          <div className="flex flex-col gap-2">
+                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusClass(request.status)}`}>
+                              {request.status}
                             </span>
+                            {isMyRequest(request) && (
+                              <span className="px-2 py-1 text-xs font-semibold bg-amber-500/20 border border-amber-500/50 text-amber-300 rounded">
+                                Your Request
+                              </span>
+                            )}
+                            <span className={`px-2 py-1 text-xs font-semibold rounded ${getUrgencyColor(request.urgency)}`}>
+                              {request.urgency?.toUpperCase()} PRIORITY
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-300 mb-1">📍 Location</h4>
+                            <p className="text-gray-400">{request.location}</p>
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-medium text-gray-300 mb-1">📞 Contact</h4>
+                            <p className="text-gray-400">{request.phoneNumber || request.contactInfo}</p>
+                          </div>
+                        </div>
+
+                        {request.message && (
+                          <div className="mb-4">
+                            <h4 className="text-sm font-medium text-gray-300 mb-1">💬 Message</h4>
+                            <p className="text-gray-400">{request.message}</p>
+                          </div>
+                        )}
+
+                        <div className="flex items-center gap-4 text-sm text-gray-400">
+                          <span>🕒 {new Date(request.createdAt).toLocaleString()}</span>
+                          {request.estimatedTime && (
+                            <span>⏱️ ~{request.estimatedTime} min</span>
                           )}
                         </div>
-                        <p className="text-gray-900 font-medium">Location: {request.location}</p>
-                        <p className="text-gray-600 text-sm">Urgency: {request.urgency}</p>
-                        <p className="text-gray-600 text-sm">Phone: {request.phoneNumber || request.contactInfo}</p>
-                        <p className="text-gray-600 text-sm">{new Date(request.createdAt).toLocaleString()}</p>
-                        {request.message && (
-                          <p className="text-gray-600 text-sm mt-1">Message: {request.message}</p>
-                        )}
                       </div>
+
+                      {/* Action Button */}
                       {request.status === 'OPEN' && !isMyRequest(request) && (
                         <button
                           onClick={() => handleAcceptRequest(request._id)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                          className="ev-neon-button px-6 py-3 ev-charging-pulse"
                         >
                           Accept Request
                         </button>

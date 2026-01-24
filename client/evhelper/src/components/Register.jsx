@@ -89,29 +89,36 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="mb-6">
-            <h2 className="text-center text-3xl font-extrabold text-gray-900">
-              Create Account
-            </h2>
-            <p className="text-center text-gray-600 mb-6">
-              Join the EV Helper community and get emergency charging assistance
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative z-10">
+      <div className="ev-container ev-mobile-center">
+        <div className="ev-card ev-mobile-full-width max-w-md">
+          <div className="ev-section ev-text-center">
+            <div className="mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-cyan-400 to-blue-500 rounded-full ev-charging-pulse">
+                <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+              </div>
+            </div>
+            <h1 className="ev-heading-1 ev-neon-text mb-2">
+              Join EV Helper
+            </h1>
+            <p className="ev-text-muted">
+              Connect with EV charging community
             </p>
           </div>
 
           {/* Error Display */}
           {errors.general && (
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-md">
-              <div className="text-sm">{errors.general}</div>
+            <div className="ev-form-field p-4 bg-red-500/20 border border-red-500/50 text-red-300 rounded-lg backdrop-blur-sm">
+              <div className="ev-text-body">{errors.general}</div>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name Field */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
                 Full Name
               </label>
               <input
@@ -120,19 +127,17 @@ const Register = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                  errors.name ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`ev-input w-full ${errors.name ? 'border-red-500' : ''}`}
                 placeholder="Enter your full name"
               />
               {errors.name && (
-                <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.name}</p>
               )}
             </div>
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
                 Email Address
               </label>
               <input
@@ -141,19 +146,17 @@ const Register = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                  errors.email ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`ev-input w-full ${errors.email ? 'border-red-500' : ''}`}
                 placeholder="Enter your email"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.email}</p>
               )}
             </div>
 
             {/* City Field */}
             <div>
-              <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="city" className="block text-sm font-medium text-gray-300 mb-2">
                 City
               </label>
               <input
@@ -162,19 +165,17 @@ const Register = () => {
                 name="city"
                 value={formData.city}
                 onChange={handleChange}
-                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                  errors.city ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`ev-input w-full ${errors.city ? 'border-red-500' : ''}`}
                 placeholder="Enter your city"
               />
               {errors.city && (
-                <p className="mt-1 text-sm text-red-600">{errors.city}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.city}</p>
               )}
             </div>
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
                 Password
               </label>
               <input
@@ -183,19 +184,17 @@ const Register = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                  errors.password ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`ev-input w-full ${errors.password ? 'border-red-500' : ''}`}
                 placeholder="Enter your password"
               />
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.password}</p>
               )}
             </div>
 
             {/* Confirm Password Field */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
                 Confirm Password
               </label>
               <input
@@ -204,13 +203,11 @@ const Register = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className={`block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                  errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`ev-input w-full ${errors.confirmPassword ? 'border-red-500' : ''}`}
                 placeholder="Confirm your password"
               />
               {errors.confirmPassword && (
-                <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.confirmPassword}</p>
               )}
             </div>
 
@@ -219,14 +216,11 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={state.loading}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="ev-neon-button w-full disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {state.loading ? (
-                  <span className="absolute inset-y-0 inset-x-0 flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 8-8 8-8 8 8 0 0-4.583-4.583 0-10 10 0 10 10 0 4.583 4.583Z"></path>
-                    </svg>
+                  <span className="flex items-center justify-center">
+                    <div className="ev-loading mr-3"></div>
                     Processing...
                   </span>
                 ) : (
@@ -237,10 +231,10 @@ const Register = () => {
           </form>
 
           {/* Login Link */}
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
+          <div className="text-center mt-6">
+            <p className="text-sm text-gray-400">
               Already have an account?{' '}
-              <a href="/login" className="font-medium text-blue-600 hover:text-blue-500">
+              <a href="/login" className="font-medium text-cyan-400 hover:text-cyan-300 transition-colors">
                 Sign in
               </a>
             </p>
