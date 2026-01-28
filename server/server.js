@@ -1,17 +1,23 @@
 import http from "http";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import app from "./src/app.js";
-import ChargingRequest from './src/models/ChargingRequest.js';
-import User from './src/models/User.js';
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Load environment variables first
 dotenv.config({ path: path.join(__dirname, '.env') });
+
 import { Server } from "socket.io";
+import app from "./src/app.js";
+import connectDB from './src/config/db.js';
+import ChargingRequest from './src/models/ChargingRequest.js';
+import User from './src/models/User.js';
+
+// Connect to MongoDB after environment variables are loaded
+connectDB();
 
 const server = http.createServer(app);
 

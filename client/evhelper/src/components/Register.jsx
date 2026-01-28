@@ -91,13 +91,11 @@ const Register = () => {
   return (
     <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative z-10">
       <div className="ev-container ev-mobile-center">
-        <div className="ev-card ev-mobile-full-width max-w-md">
+        <div className="ev-card ev-mobile-full-width">
           <div className="ev-section ev-text-center">
             <div className="mb-6">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-cyan-400 to-blue-500 rounded-full ev-charging-pulse">
-                <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                </svg>
+              <div className="inline-flex items-center justify-center rounded-full ev-charging-pulse" style={{background: 'linear-gradient(135deg, rgb(6, 182, 212) 0%, rgb(59, 130, 246) 100%)', padding: '12px'}}>
+                <span className="text-white text-2xl">⚡</span>
               </div>
             </div>
             <h1 className="ev-heading-1 ev-neon-text mb-2">
@@ -127,7 +125,7 @@ const Register = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className={`ev-input w-full ${errors.name ? 'border-red-500' : ''}`}
+                className={`ev-input ${errors.name ? 'border-red-500' : ''}`}
                 placeholder="Enter your full name"
               />
               {errors.name && (
@@ -146,7 +144,7 @@ const Register = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`ev-input w-full ${errors.email ? 'border-red-500' : ''}`}
+                className={`ev-input ${errors.email ? 'border-red-500' : ''}`}
                 placeholder="Enter your email"
               />
               {errors.email && (
@@ -165,7 +163,7 @@ const Register = () => {
                 name="city"
                 value={formData.city}
                 onChange={handleChange}
-                className={`ev-input w-full ${errors.city ? 'border-red-500' : ''}`}
+                className={`ev-input ${errors.city ? 'border-red-500' : ''}`}
                 placeholder="Enter your city"
               />
               {errors.city && (
@@ -184,7 +182,7 @@ const Register = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className={`ev-input w-full ${errors.password ? 'border-red-500' : ''}`}
+                className={`ev-input ${errors.password ? 'border-red-500' : ''}`}
                 placeholder="Enter your password"
               />
               {errors.password && (
@@ -203,7 +201,7 @@ const Register = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className={`ev-input w-full ${errors.confirmPassword ? 'border-red-500' : ''}`}
+                className={`ev-input ${errors.confirmPassword ? 'border-red-500' : ''}`}
                 placeholder="Confirm your password"
               />
               {errors.confirmPassword && (
@@ -216,7 +214,7 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={state.loading}
-                className="ev-neon-button w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="ev-neon-button disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {state.loading ? (
                   <span className="flex items-center justify-center">

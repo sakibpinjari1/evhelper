@@ -1,19 +1,35 @@
-/* EV Helper - Refined Futuristic Theme */
+/* Modern EV Helper Theme - Clean Design */
 :root {
-  /* EV Color Palette - Refined */
-  --ev-bg-primary: #0f0f0f;
-  --ev-bg-secondary: #1a1a2e;
-  --ev-bg-tertiary: #16213e;
-  --ev-accent-blue: #00a8cc;
-  --ev-accent-cyan: #00e5cc;
-  --ev-accent-purple: #6366f1;
+  /* Color Palette */
+  --primary: #3b82f6;
+  --primary-dark: #1e40af;
+  --primary-light: #60a5fa;
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --bg: #0f172a;
+  --bg-secondary: #1e293b;
+  --surface: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border: #334155;
+  --border-light: #475569;
+  
+  /* Legacy compatibility */
+  --ev-bg-primary: #0f172a;
+  --ev-bg-secondary: #1e293b;
+  --ev-bg-tertiary: #334155;
+  --ev-accent-blue: #3b82f6;
+  --ev-accent-cyan: #06b6d4;
+  --ev-accent-purple: #a855f7;
   --ev-accent-amber: #f59e0b;
   --ev-accent-red: #ef4444;
-  --ev-text-primary: #ffffff;
-  --ev-text-secondary: #b4b4b4;
-  --ev-text-muted: #6b7280;
-  --ev-border: rgba(255, 255, 255, 0.15);
-  --ev-border-glow: rgba(0, 212, 255, 0.25);
+  --ev-text-primary: #f1f5f9;
+  --ev-text-secondary: #cbd5e1;
+  --ev-text-muted: #94a3b8;
+  --ev-border: rgba(51, 65, 85, 0.5);
+  --ev-border-glow: rgba(59, 130, 246, 0.25);
   
   /* Spacing System - 4px base */
   --ev-space-1: 4px;
@@ -37,9 +53,6 @@
   --ev-shadow-glow: 0 0 16px rgba(0, 212, 255, 0.15);
   
   /* Button Standards */
-  --ev-btn-height-sm: 40px;
-  --ev-btn-height-md: 48px;
-  --ev-btn-height-lg: 56px;
   --ev-btn-padding-sm: 12px 20px;
   --ev-btn-padding-md: 16px 24px;
   --ev-btn-padding-lg: 20px 32px;
@@ -58,8 +71,6 @@ body {
   background: linear-gradient(135deg, var(--ev-bg-primary) 0%, var(--ev-bg-secondary) 50%, var(--ev-bg-tertiary) 100%);
   color: var(--ev-text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
 }
 
 /* Electric Grid Background */
@@ -67,8 +78,6 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
   background-image: 
     linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
@@ -120,8 +129,6 @@ body {
   position: absolute;
   top: 0;
   left: -100%;
-  width: 100%;
-  height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   transition: left 0.5s ease;
 }
@@ -198,8 +205,6 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 0;
-  height: 0;
   border-radius: 50%;
   background: rgba(0, 255, 136, 0.6);
   transform: translate(-50%, -50%);
@@ -222,8 +227,6 @@ body {
 /* Loading Animation */
 .ev-loading {
   display: inline-block;
-  width: 20px;
-  height: 20px;
   border: 2px solid var(--ev-border);
   border-top: 2px solid var(--ev-accent-blue);
   border-radius: 50%;
@@ -282,23 +285,19 @@ body {
   
   .ev-neon-button {
     padding: var(--ev-btn-padding-sm);
-    height: var(--ev-btn-height-sm);
     font-size: 14px;
   }
   
   .ev-button-primary {
     padding: var(--ev-btn-padding-sm);
-    height: var(--ev-btn-height-sm);
   }
   
   .ev-button-secondary {
     padding: var(--ev-btn-padding-sm);
-    height: var(--ev-btn-height-sm);
   }
   
   .ev-button-danger {
     padding: var(--ev-btn-padding-sm);
-    height: var(--ev-btn-height-sm);
   }
   
   /* Mobile typography */
@@ -465,7 +464,6 @@ body {
 }
 
 .ev-mobile-full-width {
-  width: 100%;
   max-width: none;
 }
 
@@ -475,8 +473,7 @@ body {
   .ev-button-primary,
   .ev-button-secondary,
   .ev-button-danger {
-    min-height: 44px;
-    min-width: 44px;
+    padding: var(--ev-btn-padding-md);
   }
 }
 
@@ -552,7 +549,6 @@ body {
   border-radius: var(--ev-btn-radius);
   font-weight: var(--ev-btn-font-weight);
   font-size: 14px;
-  height: var(--ev-btn-height-md);
   position: relative;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -569,7 +565,6 @@ body {
   border-radius: var(--ev-btn-radius);
   font-weight: var(--ev-btn-font-weight);
   font-size: 14px;
-  height: var(--ev-btn-height-sm);
   transition: all 0.3s ease;
   backdrop-filter: var(--ev-glass-blur);
   cursor: pointer;
@@ -583,7 +578,6 @@ body {
   border-radius: var(--ev-btn-radius);
   font-weight: var(--ev-btn-font-weight);
   font-size: 14px;
-  height: var(--ev-btn-height-sm);
   transition: all 0.3s ease;
   cursor: pointer;
 }

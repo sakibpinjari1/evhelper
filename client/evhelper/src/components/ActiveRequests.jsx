@@ -111,7 +111,7 @@ const ActiveRequests = () => {
 
   return (
     <div className="min-h-screen py-8 relative z-10">
-      <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
+      <div className="mx-auto sm:px-6 lg:px-8">
         {/* Header */}
         <div className="ev-card ev-card-spacing">
           <div className="ev-section">
@@ -121,9 +121,7 @@ const ActiveRequests = () => {
                   onClick={() => navigate('/dashboard')}
                   className="ev-button-secondary"
                 >
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
+                  <span className="mr-2">←</span>
                   Back
                 </button>
                 <div>
@@ -162,9 +160,7 @@ const ActiveRequests = () => {
             ) : requests.length === 0 ? (
               <div className="text-center py-12">
                 <div className="mb-4">
-                  <svg className="w-16 h-16 mx-auto text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                  </svg>
+                  <span className="text-gray-500 text-5xl">⚡</span>
                 </div>
                 <p className="text-lg text-gray-400">No active requests in your city</p>
                 <p className="text-sm text-gray-500 mt-2">Be the first to help or check back later</p>
@@ -176,7 +172,7 @@ const ActiveRequests = () => {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className="text-3xl">{getStatusIcon(request.status)}</div>
+                          <div className="text-lg">{getStatusIcon(request.status)}</div>
                           <div className="flex flex-col gap-2">
                             <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusClass(request.status)}`}>
                               {request.status}

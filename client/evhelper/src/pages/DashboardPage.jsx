@@ -181,10 +181,8 @@ const DashboardPage = () => {
           <div className="ev-section">
             <div className="ev-flex-center justify-between">
               <div className="ev-flex-center gap-4">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-linear-to-br from-cyan-400 to-blue-500 rounded-full ev-charging-pulse">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                  </svg>
+                <div className="inline-flex items-center justify-center rounded-full ev-charging-pulse" style={{background: 'linear-gradient(135deg, rgb(6, 182, 212) 0%, rgb(59, 130, 246) 100%)', padding: '12px'}}>
+                  <span className="text-white text-2xl">⚡</span>
                 </div>
                 <h1 className="ev-heading-1 ev-neon-text">Dashboard</h1>
               </div>
@@ -206,19 +204,15 @@ const DashboardPage = () => {
           >
             <div className="p-6 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-linear-to-br from-cyan-400 to-blue-500 rounded-lg flex items-center justify-center group-hover:ev-charging-pulse">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                  </svg>
+                <div className="rounded-lg flex items-center justify-center group-hover:ev-charging-pulse" style={{background: 'linear-gradient(135deg, rgb(6, 182, 212) 0%, rgb(59, 130, 246) 100%)', padding: '12px'}}>
+                  <span className="text-white text-xl">⚡</span>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white">Create Charging Request</h3>
                   <p className="text-gray-400 text-sm">Get emergency charging assistance</p>
                 </div>
               </div>
-              <svg className="w-5 h-5 text-gray-400 group-hover:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+              <span className="text-gray-400 group-hover:text-cyan-400 transition-colors text-lg">→</span>
             </div>
           </a>
 
@@ -228,19 +222,15 @@ const DashboardPage = () => {
           >
             <div className="p-6 flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-linear-to-br from-green-400 to-blue-500 rounded-lg flex items-center justify-center group-hover:ev-charging-pulse">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                  </svg>
+                <div className="rounded-lg flex items-center justify-center group-hover:ev-charging-pulse" style={{background: 'linear-gradient(135deg, rgb(16, 185, 129) 0%, rgb(59, 130, 246) 100%)', padding: '12px'}}>
+                  <span className="text-white text-xl">✓</span>
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white">View Active Requests</h3>
                   <p className="text-gray-400 text-sm">Help other EV owners in your city</p>
                 </div>
               </div>
-              <svg className="w-5 h-5 text-gray-400 group-hover:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+              <span className="text-gray-400 group-hover:text-cyan-400 transition-colors text-lg">→</span>
             </div>
           </a>
         </div>
@@ -250,8 +240,8 @@ const DashboardPage = () => {
           <div className="p-6 lg:p-8">
             <div className="flex items-center gap-6">
               <div className="shrink-0">
-                <div className="w-20 h-20 bg-linear-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-2xl">
+                <div className="rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, rgb(6, 182, 212) 0%, rgb(59, 130, 246) 100%)'}}>
+                  <span className="text-white font-bold" style={{fontSize: '12px'}}>
                     {state.user?.name?.charAt(0) || 'U'}
                   </span>
                 </div>
@@ -293,9 +283,7 @@ const DashboardPage = () => {
                 {requests.length === 0 ? (
                   <div className="text-center py-12 text-gray-400">
                     <div className="mb-4">
-                      <svg className="w-16 h-16 mx-auto text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                      </svg>
+                      <span className="text-gray-500 text-5xl">⚡</span>
                     </div>
                     <p className="text-lg">No charging requests found.</p>
                     <p className="text-sm mt-2">Create your first request to get emergency charging assistance!</p>

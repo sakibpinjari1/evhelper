@@ -131,10 +131,8 @@ const ChargingRequestForm = () => {
             {/* Header */}
             <div className="ev-section ev-text-center">
               <div className="mb-6">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-cyan-400 to-blue-500 rounded-full ev-charging-pulse">
-                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                  </svg>
+                <div className="inline-flex items-center justify-center rounded-full ev-charging-pulse" style={{background: 'linear-gradient(135deg, rgb(6, 182, 212) 0%, rgb(59, 130, 246) 100%)', padding: '12px'}}>
+                  <span className="text-white text-2xl">⚡</span>
                 </div>
               </div>
               <h1 className="ev-heading-1 ev-neon-text mb-2">Create Charging Request</h1>
@@ -159,7 +157,7 @@ const ChargingRequestForm = () => {
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
-                  className={`ev-input w-full resize-none ${errors.location ? 'border-red-500' : ''}`}
+                  className={`ev-input resize-none ${errors.location ? 'border-red-500' : ''}`}
                   rows={3}
                   placeholder="Enter your current location or address"
                 />
@@ -186,7 +184,7 @@ const ChargingRequestForm = () => {
                       }`}
                     >
                       <div className="text-center">
-                        <div className="text-2xl mb-1">{getUrgencyIcon(level)}</div>
+                        <div className="text-lg mb-1">{getUrgencyIcon(level)}</div>
                         <div className="text-sm font-medium capitalize">{level}</div>
                       </div>
                     </button>
@@ -207,7 +205,7 @@ const ChargingRequestForm = () => {
                   name="message"
                   value={formData.message}
                   onChange={handleChange}
-                  className={`ev-input w-full resize-none ${errors.message ? 'border-red-500' : ''}`}
+                  className={`ev-input resize-none ${errors.message ? 'border-red-500' : ''}`}
                   rows={3}
                   placeholder="Any additional information that might help (optional)"
                 />
@@ -227,7 +225,7 @@ const ChargingRequestForm = () => {
                   name="phoneNumber"
                   value={formData.phoneNumber}
                   onChange={handleChange}
-                  className={`ev-input w-full ${errors.phoneNumber ? 'border-red-500' : ''}`}
+                  className={`ev-input ${errors.phoneNumber ? 'border-red-500' : ''}`}
                   placeholder="Enter your phone number"
                 />
                 {errors.phoneNumber && (
@@ -247,7 +245,7 @@ const ChargingRequestForm = () => {
                   value={formData.estimatedTime}
                   onChange={handleChange}
                   min="1"
-                  className={`ev-input w-full ${errors.estimatedTime ? 'border-red-500' : ''}`}
+                  className={`ev-input ${errors.estimatedTime ? 'border-red-500' : ''}`}
                   placeholder="How long do you need to charge?"
                 />
                 {errors.estimatedTime && (
@@ -259,7 +257,7 @@ const ChargingRequestForm = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="ev-neon-button w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="ev-neon-button disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center">
