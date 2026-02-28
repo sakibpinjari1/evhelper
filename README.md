@@ -103,6 +103,7 @@ evhelper/
 - **City-based Matching**: Connect users and helpers in the same city
 - **Charging Request Management**: Create, accept, and track charging requests
 - **Responsive Design**: Mobile-friendly React frontend
+- **Circuit Live Charging**: Blynk-backed live voltage/battery/status + relay control
 
 ### API Endpoints
 
@@ -111,6 +112,34 @@ evhelper/
 - `GET /api/charging/requests` - Get charging requests
 - `POST /api/charging/request` - Create charging request
 - `POST /api/charging/accept/:id` - Accept charging request
+- `GET /api/iot/status` - Get live Blynk telemetry (`V0`, `V1`, `V2`, `V3`)
+- `POST /api/iot/relay` - Update relay state via `V3` (`{ "state": 0|1 }`)
+- `POST /api/iot/relay/test` - Emit test relay status event without hardware write (disabled by default)
+
+### Circuit Live Setup
+
+1. Add this to `server/.env`:
+   ```
+   BLYNK_AUTH_TOKEN=your_blynk_device_token
+   ```
+   Or copy `server/.env.example` and fill values.
+2. Keep these Blynk datastream mappings in your firmware/template:
+   - `V0` = voltage
+   - `V1` = battery percentage
+   - `V2` = status text
+   - `V3` = relay switch (0/1)
+3. Start backend and frontend.
+4. Log in and open:
+   - `/circuit-live`
+
+### IoT Safety Controls
+
+- `IOT_STRICT_MODE=true`:
+  - Backend exits at startup if `BLYNK_AUTH_TOKEN` is missing.
+- `IOT_RELAY_MIN_INTERVAL_MS`:
+  - Rate-limits relay writes to protect hardware from rapid toggles.
+- `IOT_ALLOW_RELAY_TEST=true`:
+  - Enables `POST /api/iot/relay/test` for software-only relay event simulation.
 
 ### Socket Events
 

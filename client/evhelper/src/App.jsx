@@ -5,6 +5,7 @@ import PrivateRoute from './components/PrivateRoute.jsx';
 import Register from './components/Register.jsx';
 import Login from './components/Login.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
+import CircuitLivePage from './pages/CircuitLivePage.jsx';
 import ChargingRequestForm from './components/ChargingRequestForm.jsx';
 import ActiveRequests from './components/ActiveRequests.jsx';
 import './App.css'
@@ -38,6 +39,13 @@ function AppRoutes() {
         <Route path="/active-requests" element={
           <PrivateRoute>
             <ActiveRequests />
+          </PrivateRoute>
+        } />
+
+        {/* Circuit Live Route */}
+        <Route path="/circuit-live" element={
+          <PrivateRoute>
+            <CircuitLivePage />
           </PrivateRoute>
         } />
 

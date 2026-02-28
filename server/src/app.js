@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authroutes.js";
 import chargingRoutes from "./routes/chargingRoutes.js";
+import iotRoutes from "./routes/iotRoutes.js";
 import authMiddleware from "./middleware/auth.js";
 import User from "./models/User.js";
 import path from "path";
@@ -60,6 +61,7 @@ app.use(express.static(staticPath, {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/charging", chargingRoutes);
+app.use("/api/iot", iotRoutes);
 
 // API 404 (keep API responses JSON)
 app.use('/api', (req, res) => {

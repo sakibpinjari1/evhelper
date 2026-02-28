@@ -386,7 +386,7 @@ const DashboardPage = () => {
         })()}
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
           <a
             href="/charging-request"
             className="ev-formal-card ev-formal-compact group cursor-pointer transition-all duration-300 hover:scale-105"
@@ -423,6 +423,28 @@ const DashboardPage = () => {
                 <div>
                   <h3 className="text-lg font-semibold text-white">View Active Requests</h3>
                   <p className="ev-formal-subtitle">Help other EV owners in your city</p>
+                </div>
+              </div>
+              <svg className="w-5 h-5 ev-formal-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </a>
+
+          <a
+            href="/circuit-live"
+            className="ev-formal-card ev-formal-compact group cursor-pointer transition-all duration-300 hover:scale-105"
+          >
+            <div className="p-4 sm:p-6 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center ev-charging-pulse ev-formal-badge">
+                  <svg className="w-6 h-6 ev-formal-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 2h6v2h-6V2zm3 20a7 7 0 0 1-7-7c0-3.53 2.61-6.45 6-6.93V6h2v2.07c3.39.48 6 3.4 6 6.93a7 7 0 0 1-7 7zm0-2a5 5 0 0 0 5-5 5 5 0 1 0-10 0 5 5 0 0 0 5 5z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">Circuit Live Charging</h3>
+                  <p className="ev-formal-subtitle">Monitor battery and control relay</p>
                 </div>
               </div>
               <svg className="w-5 h-5 ev-formal-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">

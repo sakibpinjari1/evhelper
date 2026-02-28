@@ -16,6 +16,25 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '.env') });
 import { Server } from "socket.io";
 
+const requireEnv = (name) => {
+  const value = process.env[name];
+  if (!value || !value.toString().trim()) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+};
+
+const validateEnvironment = () => {
+  requireEnv("MONGO_URI");
+  requireEnv("JWT_SECRET");
+
+  const strictIot = String(process.env.IOT_STRICT_MODE || "false").toLowerCase() === "true";
+  if (strictIot) {
+    requireEnv("BLYNK_AUTH_TOKEN");
+  }
+};
+
+validateEnvironment();
+
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -224,7 +243,7 @@ io.on("connection", (socket) => {
    * Event: 'join-city'
    * Data: { city: string }
    */
-  socket.on("join-city", (data) => {
+  socket.on("join-city", async (data) => {
     try {
       if (!socket.userId) {
         socket.emit("error", { message: "User not authenticated" });
